@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30225.117
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NasaAPICore", "NasaAPICore\NasaAPICore.csproj", "{2E437DCD-558A-4A68-AE40-2F4CD27ECF3C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NasaAPITerminal", "NasaAPITerminal\NasaAPITerminal.csproj", "{89616F59-42CF-4CDE-89C5-C994212072A7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2E437DCD-558A-4A68-AE40-2F4CD27ECF3C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E437DCD-558A-4A68-AE40-2F4CD27ECF3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E437DCD-558A-4A68-AE40-2F4CD27ECF3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E437DCD-558A-4A68-AE40-2F4CD27ECF3C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89616F59-42CF-4CDE-89C5-C994212072A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89616F59-42CF-4CDE-89C5-C994212072A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89616F59-42CF-4CDE-89C5-C994212072A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89616F59-42CF-4CDE-89C5-C994212072A7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {713E0FD1-DB19-4C41-A66B-7BC6949BEE29}
+	EndGlobalSection
+EndGlobal

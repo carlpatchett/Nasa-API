@@ -1,45 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
-using NasaAPICore.DataStructures;
-using Newtonsoft.Json;
+﻿using NasaAPICore.DataStructures;
 using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace NasaAPICore
+namespace NasaAPICore.APIParser
 {
-    public class DataController
+    /// <summary>
+    /// Contains all functionality required to parse API Requests from an <see cref="APIRequests.APIRequestHub"/>.
+    /// </summary>
+    public class APIParserHub
     {
-        private const string NEAR_OBJECTS_REQUEST_URL = "https://api.nasa.gov/neo/rest/v1/feed?";
-        private const string NASA_API_KEY = "H8bADZaJKT5icCqe0PwuM8FWJbIEVElirNGzvnBN";
-        //private const string NEAR_OBJECTS_REQUEST = "https://api.nasa.gov/neo/rest/v1/feed?start_date=2020-09-08&end_date=2020-09-09&api_key=H8bADZaJKT5icCqe0PwuM8FWJbIEVElirNGzvnBN";
 
-        public IEnumerable<NearEarthObject> RetrieveNEOData(DateTime startDate, DateTime endDate)
+        public APIParserHub()
         {
 
-            var modifiedRequestUrl = $"{NEAR_OBJECTS_REQUEST_URL}start_date={startDate:yyyy-MM-dd}&end_date={endDate:yyyy-MM-dd}&api_key={NASA_API_KEY}";
-
-            var request = WebRequest.Create(modifiedRequestUrl);
-
-            try
-            {
-                using (var response = (HttpWebResponse)request.GetResponse())
-                using (var stream = response.GetResponseStream())
-                using (var reader = new StreamReader(stream))
-                {
-                    var temp = reader.ReadToEnd();
-
-                    return this.ParseNEOString(temp);
-                };
-            }
-            catch
-            {
-                throw;
-            }
         }
 
-        private IEnumerable<NearEarthObject> ParseNEOString(string jsonResponse)
+        #region Object Parsing
+
+        /// <summary>
+        /// Parses a provided json response into an <see cref="IEnumerable{NearEarthObject}"/>.
+        /// </summary>
+        /// <param name="jsonResponse">The json response to parse.</param>
+        /// <returns>An <see cref="IEnumerable{NearEarthObject}"/> containing all near earth objects parsed.</returns>
+        public IEnumerable<NearEarthObject> ParseNEOs(string jsonResponse)
         {
             var obj = ToObject(jsonResponse) as IDictionary<string, object>;
             var links = obj["links"];
@@ -47,7 +32,7 @@ namespace NasaAPICore
             var nearEarthObjectsByDate = (IDictionary<string, object>)obj["near_earth_objects"];
 
             var objectList = new List<NearEarthObject>();
-            foreach  (var dateEntry in nearEarthObjectsByDate)
+            foreach (var dateEntry in nearEarthObjectsByDate)
             {
                 var parsedDate = DateTime.Parse(dateEntry.Key);
                 var type = dateEntry.Value.GetType();
@@ -138,6 +123,10 @@ namespace NasaAPICore
             return objectList;
         }
 
+        #endregion
+
+        #region Helper Methods
+
         private static object ToObject(string json)
         {
             if (string.IsNullOrEmpty(json))
@@ -163,5 +152,7 @@ namespace NasaAPICore
                     return ((JValue)token).Value;
             }
         }
+
+        #endregion
     }
 }

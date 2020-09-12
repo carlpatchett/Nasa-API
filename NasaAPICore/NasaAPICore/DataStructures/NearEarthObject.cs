@@ -12,6 +12,8 @@ namespace NasaAPICore
 
         }
 
+        public bool IsChecked { get; set; }
+
         public string Link { get; set; }
 
         public string Id { get; set; }

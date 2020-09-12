@@ -1,7 +1,7 @@
 ﻿using NasaAPICore;
 using System;
 
-namespace NasaAPITerminal
+namespace NasaAPINEOMonitor
 {
     class Program
     {

@@ -269,5 +269,53 @@ namespace NasaAPICore.Registry
         }
 
         #endregion
+
+        #region Registry Value Validation Methods
+
+        public bool ValidateConnectionString(string connectionString)
+        {
+            var splitString = connectionString.Split(';');
+
+            // Connection string requires 5 parts, 
+            // datasource=value;port=value;username=value;password=value;database=value
+            if (splitString.Length != 5)
+            {
+                return false;
+            }
+
+            foreach (var section in splitString)
+            {
+                var splitSection = section.Split('=');
+
+                // Each section requires 2 bits, setting=value
+                if (splitSection.Length != 2)
+                {
+                    return false;
+                }
+
+                if (string.Equals(splitSection[0], "port", StringComparison.Ordinal))
+                {
+                    // Port should be a parsable integer
+                    if(!int.TryParse(splitSection[1], out var _))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        public bool ValidateAPIKey(string apiKey)
+        {
+            if (apiKey.Contains(" "))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        #endregion
     }
 }

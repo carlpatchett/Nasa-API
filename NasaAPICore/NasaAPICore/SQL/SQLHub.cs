@@ -70,11 +70,51 @@ namespace NasaAPICore.SQL
         /// <param name="neos">The <see cref="IEnumerable{NearEarthObject}"/> containing near earth objects to store.</param>
         public void SQLQueryStoreNEOs(string connectionString, IEnumerable<NearEarthObject> neos)
         {
-            var baseQuery = "INSERT IGNORE INTO near_earth_objects(name,data) VALUES";
+            var baseQuery = "INSERT IGNORE INTO near_earth_objects(name," +
+                "nasa_jpl_url," +
+                "absolute_magnitude," +
+                "est_dia_kilometers_max," +
+                "est_dia_kilometers_min," +
+                "est_dia_meters_max," +
+                "est_dia_meters_min," +
+                "est_dia_miles_max," +
+                "est_dia_miles_min," +
+                "potentially_hazardous," +
+                "cls_app_date," +
+                "cls_app_epoch," +
+                "cls_app_kilometers_per_second," +
+                "cls_app_kilometers_per_hour," +
+                "cls_app_miles_per_hour," +
+                "miss_dst_astronomical," +
+                "miss_dst_lunar," +
+                "miss_dst_kilometers," +
+                "miss_dst_miles," +
+                "cls_app_orbiting_body," +
+                "is_sentry_object) VALUES";
 
             foreach (var neo in neos)
             {
-                baseQuery = $"{baseQuery} ('{neo.Name}','{JsonConvert.SerializeObject(neo)}'),";
+                baseQuery = $"{baseQuery} ('{neo.Name}'," +
+                    $"'{neo.NasaJplUrl}'," +
+                    $"'{neo.AbsoluteMagnitude}'," +
+                    $"'{neo.EstimatedDiameter.KilometersMax}'," +
+                    $"'{neo.EstimatedDiameter.KilometersMin}'," +
+                    $"'{neo.EstimatedDiameter.MetersMax}'," +
+                    $"'{neo.EstimatedDiameter.MetersMin}'," +
+                    $"'{neo.EstimatedDiameter.MilesMax}'," +
+                    $"'{neo.EstimatedDiameter.MilesMin}'," +
+                    $"'{neo.PotentiallyHazardous}'," +
+                    $"'{neo.CloseApproachData.CloseApproachDate}'," +
+                    $"'{neo.CloseApproachData.EpochDateClose}'," +
+                    $"'{neo.CloseApproachData.RelativeVelocity.KilometersPerSecond}'," +
+                    $"'{neo.CloseApproachData.RelativeVelocity.KilometersPerHour}'," +
+                    $"'{neo.CloseApproachData.RelativeVelocity.MilesPerHour}'," +
+                    $"'{neo.CloseApproachData.MissDistance.Astronomical}'," +
+                    $"'{neo.CloseApproachData.MissDistance.Lunar}'," +
+                    $"'{neo.CloseApproachData.MissDistance.Kilometers}'," +
+                    $"'{neo.CloseApproachData.MissDistance.Miles}'," +
+                    $"'{neo.CloseApproachData.OrbitingBody}'," +
+                    $"'{neo.IsSentryObject}'),";
             }
 
             var modifiedQueryString = baseQuery.Substring(0, baseQuery.Length - 1);

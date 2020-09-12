@@ -2,7 +2,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace NasaAPITerminal
+namespace NasaAPINEOMonitor
 {
     /// <summary>
     /// Contains functionaltiy related to monitoring timed retrieval of NEO data.
@@ -63,7 +63,7 @@ namespace NasaAPITerminal
 
             var hoursSinceLastRetrieval = new TimeSpan(DateTime.UtcNow.Ticks - mAPIHub.RegistryHub.LastRetrievedDate.Value.Ticks).Hours;
 
-            if (hoursSinceLastRetrieval > 24)
+            if (hoursSinceLastRetrieval > 2)
             {
                 return true;
             }

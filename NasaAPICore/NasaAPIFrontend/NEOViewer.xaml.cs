@@ -20,15 +20,15 @@ using NasaAPICore;
 namespace NasaAPIFrontend
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for NEOViewer.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class NEOViewer : Window
     {
 
         private ObservableCollection<HierarchicalNode> mRootNodes;
         private Dispatcher mDispatcher;
 
-        public MainWindow()
+        public NEOViewer()
         {
             InitializeComponent();
 

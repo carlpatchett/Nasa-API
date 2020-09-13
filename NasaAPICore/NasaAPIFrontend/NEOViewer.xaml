@@ -5,13 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NasaAPIFrontend"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="NEO Viewer" Height="450" Width="800">
     <Window.Resources>
         <Thickness x:Key="DefaultMargin" Left="3" Top="3" Right="3" Bottom="3" />
     </Window.Resources>
-    
+
     <Grid>
-        
+
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto" />
@@ -76,7 +76,7 @@
 
                     <Button x:Name="RetrieveNEOsBtn"
                             VerticalAlignment="Center"
-                            Content="Retrieve"
+                            Content="API Query"
                             Click="RetrieveNEOsBtn_Click" 
                             Height="30"
                             Width="70"
@@ -84,13 +84,26 @@
                             Padding="3,3,3,3"/>
                 </StackPanel>
 
+                <Separator />
+
+                <Grid>
+                    <Label Content="Retrieve from SQL"
+                           VerticalAlignment="Center"/>
+                    <Button x:Name="SQLRetrieval"
+                            HorizontalAlignment="Right"
+                            Click="SQLRetrieval_Click"
+                            Content="SQL Query"
+                            Height="30"
+                            Width="70"
+                            Margin="{StaticResource DefaultMargin}"
+                            Padding="3,3,3,3"/>
+                </Grid>
+
                 <StackPanel Orientation="Vertical">
                     <Separator  Margin="0, 0, 0, 1"/>
 
                     <Label Content="Order By:"
                        Margin="{StaticResource DefaultMargin}"/>
-
-                    <Separator />
                 </StackPanel>
 
 

@@ -1,5 +1,7 @@
-﻿using NasaAPICore;
+﻿using NasaAPICLI.Commands;
+using NasaAPICore;
 using System;
+using System.Linq;
 
 namespace NasaAPICLI
 {
@@ -7,100 +9,93 @@ namespace NasaAPICLI
     {
         private static APIHub mAPIHub = new APIHub();
 
+        private static UpdateCommand mUpdateCommand;
+        private static SQLCommand mSQLCommand;
+        private static QuitCommand mQuitCommand;
+
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            mUpdateCommand = new UpdateCommand(mAPIHub);
+            mSQLCommand = new SQLCommand(mAPIHub);
+            mQuitCommand = new QuitCommand();
+
+            RunCore();
         }
 
         private static void RunCore()
         {
-
             while (true)
             {
                 Console.Clear();
 
-                Console.WriteLine("\nPlease select from one of the following options:");
+                PrintStart();
+
+                PrintOptions();
 
                 var userInput = Console.ReadLine();
-                var splitArguments = userInput.Split(' ');
 
-                if (splitArguments.Length == 1)
+                var baseCommand = userInput.Split(' ')[0];
+                var args = userInput.Split(' ').Skip(1).ToArray();
+
+                switch (baseCommand)
                 {
-                    switch (splitArguments[0].ToLowerInvariant())
-                    {
-                        case ConsoleCommands.QUIT_COMMAND:
+                    case ConsoleCommands.QUIT_COMMAND:
 
-                            Console.WriteLine("\nPress any key to quit...");
+                        mQuitCommand.Execute();
+                        break;
+
+                    case ConsoleCommands.UPDATE_COMMAND:
+
+                        if (!mUpdateCommand.Execute(args))
+                        {
+                            Console.WriteLine("\nCommand was not registered. Press any key to continue...");
                             Console.ReadLine();
-                            Environment.Exit(0);
-                            break;
+                        };
 
-                        default:
+                        break;
 
-                            Console.WriteLine("\nCommand that was entered was unknown. Press any key to continue...");
+                    case ConsoleCommands.SQL_COMMAND:
+
+                        if (!mSQLCommand.Execute(args))
+                        {
+                            Console.WriteLine("\nCommand was not registered. Press any key to continue...");
                             Console.ReadLine();
-                            break;
-                    }
+                        };
+
+                        break;
+
+                    default:
+
+                        Console.WriteLine("\nCommand was not registered. Press any key to continue...");
+                        Console.ReadLine();
+                        break;
                 }
-                else if (splitArguments.Length == 2)
-                {
-                    switch (splitArguments[0].ToLowerInvariant())
-                    {
-                        case ConsoleCommands.UPDATE_COMMAND:
 
-                            switch (splitArguments[1].ToLowerInvariant())
-                            {
-                                case ConsoleCommands.CONNECTION_STRING_PHRASE:
-
-                                    var connectionString = GetConnectionStringPrompt();
-
-                                    if (mAPIHub.RegistryHub.ValidateConnectionString(connectionString))
-                                    {
-                                        mAPIHub.RegistryHub.CreateAPIRegistryKeys();
-                                        mAPIHub.RegistryHub.StoreConnectionString(connectionString);
-                                        break;
-                                    }
-
-                                    Console.WriteLine("\nConnection string was invalid. Press any key to continue...");
-                                    Console.ReadLine();
-
-                                    break;
-                                case ConsoleCommands.API_KEY_PHRASE:
-
-                                    var apiKey = GetAPIKeyPrompt();
-
-                                    if (mAPIHub.RegistryHub.ValidateAPIKey(apiKey))
-                                    {
-                                        mAPIHub.RegistryHub.CreateAPIRegistryKeys();
-                                        mAPIHub.RegistryHub.StoreAPIKey(apiKey);
-                                        break;
-                                    }
-
-                                    Console.WriteLine("\nAPI Key was invalid. Press any key to continue...");
-                                    Console.ReadLine();
-
-                                    break;
-                            }
-                            break;
-
-                        default:
-
-                            Console.WriteLine("\nCommand that was entered was unknown. Press any key to continue...");
-                            Console.ReadLine();
-                            break;
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("\nCommand that was entered was unknown. Press any key to continue...");
-                    Console.ReadLine();
-                }
+                Console.WriteLine("Press any key to continue...");
+                Console.ReadLine();
             }
+        }
+
+        private static void PrintStart()
+        {
+            Console.WriteLine("##########################");
+            Console.WriteLine("\n");
+            Console.WriteLine("\nWelcome to the NASA API CLI Tool.");
+            Console.WriteLine("\nYou can use this tool to interact directly with the API.");
+            Console.WriteLine("\n");
+            Console.WriteLine("\n##########################");
+            Console.WriteLine("\n");
         }
 
         private static void PrintOptions()
         {
-            Console.WriteLine("\n'update <setting>' - runs the CLI tool to update the given setting.");
+            Console.WriteLine("\n'update <phrase>' - runs the prompt to update the stored <phrase>.");
+            Console.WriteLine("\n'update api key' - runs the prompt to update the stored API Key.");
+            Console.WriteLine("\n'update connection string' - runs the prompt to update the stored connection string.");
+            Console.WriteLine("\n'sql retrieve <phrase>' - retrieves all <phrase> from the SQL database and prints them.");
+            Console.WriteLine("\n'sql retrieve neos' - retrieves all near earth objects from the SQL database and prints them.");
+            Console.WriteLine("\n'sql store <phrase>' - stores all <phrase> to the SQL database.");
+            Console.WriteLine("\n'sql store neos' - stores all near earth objects to the SQL database.");
             Console.WriteLine("\n'quit' - quits the CLI tool.");
             Console.WriteLine("\n");
         }

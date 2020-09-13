@@ -61,7 +61,7 @@ namespace NasaAPIFrontend
         private async void RetrieveNEOsBtn_Click(object sender, RoutedEventArgs e)
         {
             var neoRequest = await this.APIHub.APIRequestHub.PerformAPIRequestNEO(this.StartDatePicker.SelectedDate.Value, this.EndDatePicker.SelectedDate.Value);
-            var neos = this.APIHub.APIParserHub.ParseNEOs(neoRequest);
+            var neos = this.APIHub.APIParserHub.ParseNEOsFromJson(neoRequest);
 
             // Order the query if we've selected something to OrderBy
             IEnumerable<NearEarthObject> query = null;
@@ -350,6 +350,90 @@ namespace NasaAPIFrontend
             this.StartDatePicker.DisplayDateEnd = this.EndDatePicker.SelectedDate.Value;
 
             this.RetrieveNEOsBtn.IsEnabled = this.EndDatePicker.SelectedDate.HasValue && this.StartDatePicker.SelectedDate.HasValue;
+        }
+
+        private void SQLRetrieval_Click(object sender, RoutedEventArgs e)
+        {
+            var table = this.APIHub.SQLHub.SQLQueryRetrieveNEOs(this.APIHub.RegistryHub.ConnectionString);
+
+            var neos = this.APIHub.APIParserHub.ParseNEOsFromDataTable(table);
+
+            // Order the query if we've selected something to OrderBy
+            IEnumerable<NearEarthObject> query = null;
+            if (this.OrderByCombobox.SelectedItem != null)
+            {
+                switch (this.OrderByCombobox.SelectedItem.ToString())
+                {
+                    case "Absolute Magnitude":
+                        if (this.OrderByDescending)
+                        {
+                            query = neos.OrderByDescending(neo => neo.AbsoluteMagnitude);
+                        }
+                        else
+                        {
+                            query = neos.OrderBy(neo => neo.AbsoluteMagnitude);
+                        }
+                        break;
+
+                    case "Estimated Diameter":
+                        if (this.OrderByDescending)
+                        {
+                            query = neos.OrderByDescending(neo => neo.EstimatedDiameter.KilometersMax);
+                        }
+                        else
+                        {
+                            query = neos.OrderBy(neo => neo.EstimatedDiameter.KilometersMax);
+                        }
+                        break;
+
+                    case "Potentially Hazardous":
+                        if (this.OrderByDescending)
+                        {
+                            query = neos.OrderByDescending(neo => neo.PotentiallyHazardous);
+                        }
+                        else
+                        {
+                            query = neos.OrderBy(neo => neo.PotentiallyHazardous);
+                        }
+                        break;
+
+                    case "Miss Distance":
+                        if (this.OrderByDescending)
+                        {
+                            query = neos.OrderByDescending(neo => neo.CloseApproachData.MissDistance.Kilometers);
+                        }
+                        else
+                        {
+                            query = neos.OrderBy(neo => neo.CloseApproachData.MissDistance.Kilometers);
+                        }
+                        break;
+                }
+            }
+
+            if (query == null)
+            {
+                query = neos;
+            }
+
+            foreach (var neo in query)
+            {
+                if (mRootNodes.FirstOrDefault(node => String.Equals(node.Name, neo.Name)) != null)
+                {
+                    // Skip if we already contain it.
+                    continue;
+                }
+
+                mRootNodes.Add(this.ParseNEOIntoNode(neo));
+            }
+
+            foreach (var node in mRootNodes)
+            {
+                if (neos.FirstOrDefault(neo => String.Equals(neo.Name, node.Name)) == null)
+                {
+                    // Remove if current list contains it.
+                    mRootNodes.Remove(node);
+                }
+            }
         }
     }
 }

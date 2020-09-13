@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Data;
 
 namespace NasaAPICore.SQL
 {
@@ -25,7 +26,8 @@ namespace NasaAPICore.SQL
         /// </summary>
         /// <param name="connectionString">The connection string for the SQL query.</param>
         /// <param name="query">The query to execute.</param>
-        public void SQLQuery(string connectionString, string query)
+        /// <returns>A DataTable response from the query, if one was present.</returns>
+        public DataTable SQLQuery(string connectionString, string query)
         {
             try
             {
@@ -45,24 +47,43 @@ namespace NasaAPICore.SQL
                 reader = command.ExecuteReader();
                 this.SystemMessage?.Invoke(this, "SQL Query Executed Successfully...");
 
+                var responseString = string.Empty;
                 while (reader.Read())
                 {
                 }
+
+                reader.Close();
+
+                var adapter = new MySqlDataAdapter(command);
+
+                var dataTable = new DataTable();
+
+                adapter.Fill(dataTable);
 
                 this.SystemMessage?.Invoke(this, "Closing SQL Connection...");
                 connection.Close();
                 this.SystemMessage?.Invoke(this, "SQL Connection Closed Successfully...");
                 this.SystemMessage?.Invoke(this, "####################");
+
+                return dataTable;
             }
             catch (Exception ex)
             {
                 this.SystemMessage?.Invoke(this, $"Exception encountered whilst executing SQL Query: \n {ex.Message}");
+                return null;
             }
         }
 
         #endregion
 
         #region Specific SQL Queries
+
+        public DataTable SQLQueryRetrieveNEOs(string connectionString)
+        {
+            var query = "SELECT * FROM near_earth_objects";
+
+            return this.SQLQuery(connectionString, query);
+        }
 
         /// <summary>
         /// Stores all provided near earth objects in an SQL table.
@@ -79,6 +100,8 @@ namespace NasaAPICore.SQL
                 "est_dia_meters_min," +
                 "est_dia_miles_max," +
                 "est_dia_miles_min," +
+                "est_dia_feet_max," +
+                "est_dia_feet_min," +
                 "potentially_hazardous," +
                 "cls_app_date," +
                 "cls_app_epoch," +
@@ -103,6 +126,8 @@ namespace NasaAPICore.SQL
                     $"'{neo.EstimatedDiameter.MetersMin}'," +
                     $"'{neo.EstimatedDiameter.MilesMax}'," +
                     $"'{neo.EstimatedDiameter.MilesMin}'," +
+                    $"'{neo.EstimatedDiameter.FeetMax}'," +
+                    $"'{neo.EstimatedDiameter.FeetMin}'," +
                     $"'{neo.PotentiallyHazardous}'," +
                     $"'{neo.CloseApproachData.CloseApproachDate}'," +
                     $"'{neo.CloseApproachData.EpochDateClose}'," +

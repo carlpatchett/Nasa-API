@@ -34,8 +34,11 @@ namespace NasaAPINEOMonitor
                     if (this.IsRetrievalRequired())
                     {
                         Console.WriteLine("NEO Retrieval Is Required...");
-                        var response = mAPIHub.APIRequestHub.PerformAPIRequestNEO(new DateTime(2020, 09, 10), new DateTime(2020, 09, 11));
-                        var neos = mAPIHub.APIParserHub.ParseNEOs(response.Result);
+                        var endDate = DateTime.UtcNow;
+                        var startdate = endDate.AddDays(-7.0);
+
+                        var response = mAPIHub.APIRequestHub.PerformAPIRequestNEO(startdate, endDate);
+                        var neos = mAPIHub.APIParserHub.ParseNEOsFromJson(response.Result);
 
                         mAPIHub.SQLHub.SQLQueryStoreNEOs(mAPIHub.RegistryHub.ConnectionString, neos);
 
@@ -50,7 +53,7 @@ namespace NasaAPINEOMonitor
                     }
                 });
 
-                System.Threading.Thread.Sleep(60000);
+                System.Threading.Thread.Sleep(1.8e+6);
             }
         }
 

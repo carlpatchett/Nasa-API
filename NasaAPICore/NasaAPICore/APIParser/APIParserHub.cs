@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 
 namespace NasaAPICore.APIParser
@@ -24,7 +25,7 @@ namespace NasaAPICore.APIParser
         /// </summary>
         /// <param name="jsonResponse">The json response to parse.</param>
         /// <returns>An <see cref="IEnumerable{NearEarthObject}"/> containing all near earth objects parsed.</returns>
-        public IEnumerable<NearEarthObject> ParseNEOs(string jsonResponse)
+        public IEnumerable<NearEarthObject> ParseNEOsFromJson(string jsonResponse)
         {
             var obj = ToObject(jsonResponse) as IDictionary<string, object>;
             var links = obj["links"];
@@ -121,6 +122,61 @@ namespace NasaAPICore.APIParser
             }
 
             return objectList;
+        }
+
+        /// <summary>
+        /// Parses a provided <see cref="DataTable"/> into an <see cref="IEnumerable{NearEarthObject}"/>.
+        /// </summary>
+        /// <param name="table">The <see cref="DataTable"/> containing information about near earth objects.</param>
+        /// <returns>An <see cref="IEnumerable{NearEarthObject}"/> containing all near earth objects parsed.</returns>
+        public IEnumerable<NearEarthObject> ParseNEOsFromDataTable(DataTable table)
+        {
+            var neos = new List<NearEarthObject>();
+            foreach (DataRow row in table.Rows)
+            {
+                var neo = new NearEarthObject()
+                {
+                    Name = row[0].ToString(),
+                    NasaJplUrl = row[1].ToString(),
+                    AbsoluteMagnitude = double.Parse(row[2].ToString()),
+                    EstimatedDiameter = new EstimatedDiameter()
+                    {
+                        KilometersMax = double.Parse(row[3].ToString()),
+                        KilometersMin = double.Parse(row[4].ToString()),
+                        MetersMax = double.Parse(row[5].ToString()),
+                        MetersMin = double.Parse(row[6].ToString()),
+                        MilesMax = double.Parse(row[7].ToString()),
+                        MilesMin = double.Parse(row[8].ToString()),
+                        FeetMax = double.Parse(row[9].ToString()),
+                        FeetMin = double.Parse(row[10].ToString())
+                    },
+                    PotentiallyHazardous = bool.Parse(row[11].ToString()),
+                    CloseApproachData = new CloseApproachData()
+                    {
+                        CloseApproachDate = DateTime.Parse(row[12].ToString()),
+                        EpochDateClose = double.Parse(row[13].ToString()),
+                        RelativeVelocity = new RelativeVelocity()
+                        {
+                            KilometersPerSecond = double.Parse(row[14].ToString()),
+                            KilometersPerHour = double.Parse(row[15].ToString()),
+                            MilesPerHour = double.Parse(row[16].ToString())
+                        },
+                        MissDistance = new MissDistance()
+                        {
+                            Astronomical = double.Parse(row[17].ToString()),
+                            Lunar = double.Parse(row[18].ToString()),
+                            Kilometers = double.Parse(row[19].ToString()),
+                            Miles = double.Parse(row[20].ToString())
+                        },
+                        OrbitingBody = row[21].ToString()
+                    },
+                    IsSentryObject = bool.Parse(row[22].ToString())
+                };
+
+                neos.Add(neo);
+            }
+
+            return neos;
         }
 
         #endregion

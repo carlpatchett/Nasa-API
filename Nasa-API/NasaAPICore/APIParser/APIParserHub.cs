@@ -13,6 +13,9 @@ namespace NasaAPICore.APIParser
     public class APIParserHub
     {
 
+        /// <summary>
+        /// Creates a new instance of <see cref="APIParserHub"/>.
+        /// </summary>
         public APIParserHub()
         {
 

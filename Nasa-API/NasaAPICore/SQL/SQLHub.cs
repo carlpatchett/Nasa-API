@@ -14,6 +14,9 @@ namespace NasaAPICore.SQL
 
         public event EventHandler<string> SystemMessage;
 
+        /// <summary>
+        /// Creates a new instance of <see cref="SQLHub"/>
+        /// </summary>
         public SQLHub()
         {
 
@@ -78,8 +81,15 @@ namespace NasaAPICore.SQL
 
         #region Specific SQL Queries
 
+        /// <summary>
+        /// Retrieves all near earth objects from the SQL database.
+        /// </summary>
+        /// <param name="connectionString">The SQL connection stirng to use.</param>
+        /// <returns></returns>
         public DataTable SQLQueryRetrieveNEOs(string connectionString)
         {
+            this.SystemMessage?.Invoke(this, "Beginning Retrieve NEO SQL Query...");
+
             var query = "SELECT * FROM near_earth_objects";
 
             return this.SQLQuery(connectionString, query);
@@ -91,6 +101,8 @@ namespace NasaAPICore.SQL
         /// <param name="neos">The <see cref="IEnumerable{NearEarthObject}"/> containing near earth objects to store.</param>
         public void SQLQueryStoreNEOs(string connectionString, IEnumerable<NearEarthObject> neos)
         {
+            this.SystemMessage?.Invoke(this, "Beginning Store NEO SQL Query...");
+
             var baseQuery = "INSERT IGNORE INTO near_earth_objects(name," +
                 "nasa_jpl_url," +
                 "absolute_magnitude," +

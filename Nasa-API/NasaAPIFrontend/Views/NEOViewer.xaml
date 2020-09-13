@@ -1,0 +1,44 @@
+﻿<UserControl x:Class="NasaAPIFrontend.NEOViewer"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NasaAPIFrontend"
+        mc:Ignorable="d"
+        Height="450" 
+        Width="900">
+    
+    <UserControl.Resources>
+        <Thickness x:Key="DefaultMargin" Left="3" Top="3" Right="3" Bottom="3" />
+    </UserControl.Resources>
+    
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Orientation="Vertical"
+                    Background="#E7E7E7">
+            <Button x:Name="TreeViewBtn"
+                    Content="Tree View"
+                    Click="TreeViewBtn_Click"
+                    Height="30"
+                    Width="70"
+                    Margin="{StaticResource DefaultMargin}"
+                    Padding="3,3,3,3"/>
+            
+            <Button x:Name="GraphViewBtn"
+                    Content="Graph View"
+                    Click="GraphViewBtn_Click"
+                    Height="30"
+                    Width="70"
+                    Margin="{StaticResource DefaultMargin}"
+                    Padding="3,3,3,3"/>
+        </StackPanel>
+        
+        <ContentControl x:Name="InternalViewControl" 
+                        Content="{Binding InternalView}"
+                        Grid.Column="1"/>
+    </Grid>
+</UserControl>

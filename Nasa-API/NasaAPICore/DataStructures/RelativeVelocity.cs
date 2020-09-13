@@ -5,6 +5,9 @@
     /// </summary>
     public class RelativeVelocity
     {
+        /// <summary>
+        /// Creates a new instace of <see cref="RelativeVelocity"/>.
+        /// </summary>
         public RelativeVelocity()
         {
 

@@ -8,6 +8,9 @@ namespace NasaAPICore
     /// </summary>
     public class CloseApproachData
     {
+        /// <summary>
+        /// Creates a new instace of <see cref="CloseApproachData"/>.
+        /// </summary>
         public CloseApproachData()
         {
 

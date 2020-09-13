@@ -13,17 +13,33 @@ namespace NasaAPICore
     {
         public event EventHandler<string> SystemMessage;
 
+        /// <summary>
+        /// Creates a new instance of <see cref="APIHub"/>.
+        /// </summary>
         public APIHub()
         {
             this.SQLHub.SystemMessage += this.SystemMessageRecieved;
+            this.APIRequestHub.APIKey = this.RegistryHub.APIKey;
         }
 
+        /// <summary>
+        /// Gets the <see cref="RegistryHub"/> in use.
+        /// </summary>
         public RegistryHub RegistryHub { get; } = new RegistryHub();
 
+        /// <summary>
+        /// Gets the <see cref="APIRequestHub"/> in use.
+        /// </summary>
         public APIRequestHub APIRequestHub { get; } = new APIRequestHub();
-
+        
+        /// <summary>
+        /// Gets the <see cref="APIParserHub"/> in use.
+        /// </summary>
         public APIParserHub APIParserHub { get; } = new APIParserHub();
 
+        /// <summary>
+        /// Gets the <see cref="SQLHub"/> in use.
+        /// </summary>
         public SQLHub SQLHub { get; } = new SQLHub();
 
         #region Event Handlers

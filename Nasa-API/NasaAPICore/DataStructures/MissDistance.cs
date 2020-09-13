@@ -5,6 +5,9 @@
     /// </summary>
     public class MissDistance
     {
+        /// <summary>
+        /// Creates a new instance of <see cref="MissDistance"/>.
+        /// </summary>
         public MissDistance()
         {
 

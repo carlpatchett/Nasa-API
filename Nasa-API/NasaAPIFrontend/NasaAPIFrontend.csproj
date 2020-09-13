@@ -67,17 +67,38 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="NEOViewer.xaml">
+    <Page Include="APIViewer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\InternalViews\NEOGraphView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\InternalViews\NEOTreeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\NEOViewer.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="APIViewer.xaml.cs">
+      <DependentUpon>APIViewer.xaml</DependentUpon>
+    </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Views\InternalViews\NEOGraphView.xaml.cs">
+      <DependentUpon>NEOGraphView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InternalViews\NEOTreeView.xaml.cs">
+      <DependentUpon>NEOTreeView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TreeViewNodes\HierarchicalNode.cs" />
     <Compile Include="TreeViewNodes\ObservableObject.cs" />
-    <Compile Include="NEOViewer.xaml.cs">
+    <Compile Include="Views\NEOViewer.xaml.cs">
       <DependentUpon>NEOViewer.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>

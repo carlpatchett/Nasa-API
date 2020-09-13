@@ -9,6 +9,9 @@ namespace NasaAPICore.DataStructures
     /// </summary>
     public class EstimatedDiameter
     {
+        /// <summary>
+        /// Creates a new instance of <see cref="EstimatedDiameter"/>.
+        /// </summary>
         public EstimatedDiameter()
         {
 

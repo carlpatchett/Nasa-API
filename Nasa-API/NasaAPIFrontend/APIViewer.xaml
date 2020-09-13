@@ -1,0 +1,42 @@
+﻿<Window x:Class="NasaAPIFrontend.APIViewer"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NasaAPIFrontend.Views.InternalViews"
+        mc:Ignorable="d"
+        Title="APIViewer" 
+        Height="550" 
+        Width="900"
+        SizeToContent="WidthAndHeight">
+
+    <Window.Resources>
+        <Thickness x:Key="DefaultMargin" Left="3" Top="3" Right="3" Bottom="3" />
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid Background="#E7E7E7">
+
+            <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Center">
+
+                <Button x:Name="NEOViewBtn"
+                    Content="NEO View"
+                    Margin="6,6,6,6"
+                    Padding="6,6,6,6"
+                    Click="NEOViewBtn_Click"/>
+            </StackPanel>
+        </Grid>
+
+        <ContentControl x:Name="APIViewControl"
+                        Grid.Row="1"
+                        Content="{Binding CurrentControl}"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"/>
+    </Grid>
+</Window>

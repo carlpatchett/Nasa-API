@@ -19,6 +19,8 @@ namespace NasaAPICLI
             mSQLCommand = new SQLCommand(mAPIHub);
             mQuitCommand = new QuitCommand();
 
+            mAPIHub.SystemMessage += SystemMessageRecieved;
+
             RunCore();
         }
 
@@ -89,51 +91,24 @@ namespace NasaAPICLI
 
         private static void PrintOptions()
         {
-            Console.WriteLine("\n'update <phrase>' - runs the prompt to update the stored <phrase>.");
             Console.WriteLine("\n'update api key' - runs the prompt to update the stored API Key.");
             Console.WriteLine("\n'update connection string' - runs the prompt to update the stored connection string.");
-            Console.WriteLine("\n'sql retrieve <phrase>' - retrieves all <phrase> from the SQL database and prints them.");
+            Console.WriteLine("\n'update <phrase>' - runs the prompt to update the stored <phrase>.");
             Console.WriteLine("\n'sql retrieve neos' - retrieves all near earth objects from the SQL database and prints them.");
-            Console.WriteLine("\n'sql store <phrase>' - stores all <phrase> to the SQL database.");
+            Console.WriteLine("\n'sql retrieve <phrase>' - retrieves all <phrase> from the SQL database and prints them.");
             Console.WriteLine("\n'sql store neos' - stores all near earth objects to the SQL database.");
+            Console.WriteLine("\n'sql store <phrase>' - stores all <phrase> to the SQL database.");
             Console.WriteLine("\n'quit' - quits the CLI tool.");
             Console.WriteLine("\n");
         }
 
-        private static string GetAPIKeyPrompt()
+        #region Event Handlers
+
+        private static void SystemMessageRecieved(object sender, string message)
         {
-            Console.Clear();
-
-            Console.WriteLine("Please enter a NASA API Key ...\n");
-
-            return Console.ReadLine();
+            Console.WriteLine($"\n{message}");
         }
 
-        private static string GetConnectionStringPrompt()
-        {
-            Console.Clear();
-
-            Console.WriteLine("Please enter an SQL datasource (ie. localhost) ...\n");
-
-            var datasource = Console.ReadLine();
-
-            Console.WriteLine("\nPlease enter an SQL port (ie. 3306) ...\n");
-
-            var port = Console.ReadLine();
-
-            Console.WriteLine("\nPlease enter an SQL username (ie. dave) ...\n");
-
-            var username = Console.ReadLine();
-
-            Console.WriteLine("\nPlease enter an SQL password (ie. test123) ...\n");
-
-            var password = Console.ReadLine();
-
-            Console.WriteLine("\nPlease enter an SQL database name (ie. my_database) ...\n");
-
-            var databaseName = Console.ReadLine();
-
-            return $"datasource={datasource};port={port};username={username};password={password};database={databaseName}"; ;
-        }
+        #endregion
     }
 }

@@ -11,12 +11,19 @@ namespace NasaAPICore.APIRequests
     public class APIRequestHub
     {
         private const string NEAR_OBJECTS_REQUEST_URL = "https://api.nasa.gov/neo/rest/v1/feed?";
-        private const string NASA_API_KEY = "H8bADZaJKT5icCqe0PwuM8FWJbIEVElirNGzvnBN";
 
+        /// <summary>
+        /// Creates a new instace of <see cref="APIRequestHub"/>.
+        /// </summary>
         public APIRequestHub()
         {
 
         }
+
+        /// <summary>
+        /// Gets/Sets the API Key to use when making API requests.
+        /// </summary>
+        public string APIKey { get; set; }
 
         #region Base API Request
 
@@ -59,7 +66,7 @@ namespace NasaAPICore.APIRequests
         /// <param name="endDate">The end <see cref="DateTime"/> from which to retrieve all near earth objects from.</param>
         public async Task<string> PerformAPIRequestNEO(DateTime startDate, DateTime endDate)
         {
-            var modifiedRequestUrl = $"{NEAR_OBJECTS_REQUEST_URL}start_date={startDate:yyyy-MM-dd}&end_date={endDate:yyyy-MM-dd}&api_key={NASA_API_KEY}";
+            var modifiedRequestUrl = $"{NEAR_OBJECTS_REQUEST_URL}start_date={startDate:yyyy-MM-dd}&end_date={endDate:yyyy-MM-dd}&api_key={this.APIKey}";
 
             return await this.PerformAPIRequest(modifiedRequestUrl);
         }

@@ -1,15 +1,16 @@
-﻿<Window x:Class="NasaAPIFrontend.NEOViewer"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:NasaAPIFrontend"
-        mc:Ignorable="d"
-        Title="NEO Viewer" Height="450" Width="800">
-    <Window.Resources>
+﻿<UserControl x:Class="NasaAPIFrontend.Views.InternalViews.NEOTreeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:NasaAPIFrontend"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    
+    <UserControl.Resources>
         <Thickness x:Key="DefaultMargin" Left="3" Top="3" Right="3" Bottom="3" />
-    </Window.Resources>
-
+    </UserControl.Resources>
+    
     <Grid>
 
         <Grid.ColumnDefinitions>
@@ -23,8 +24,7 @@
         </Grid.RowDefinitions>
 
         <Grid Grid.RowSpan="2">
-
-            <TreeView x:Name="NEOTreeView">
+            <TreeView x:Name="NEOTree">
                 <TreeView.ItemTemplate>
                     <HierarchicalDataTemplate DataType="{x:Type local:HierarchicalNode}"
                                               ItemsSource="{Binding Children}">
@@ -46,7 +46,8 @@
 
         <Grid Grid.Column="1">
 
-            <StackPanel Orientation="Vertical">
+            <StackPanel Orientation="Vertical"
+                        Background="#E7E7E7">
 
                 <Label Content="Near Earth Object Settings" 
                        HorizontalAlignment="Center"
@@ -125,4 +126,4 @@
             </StackPanel>
         </Grid>
     </Grid>
-</Window>
+</UserControl>

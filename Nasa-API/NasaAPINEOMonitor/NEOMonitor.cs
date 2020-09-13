@@ -53,7 +53,7 @@ namespace NasaAPINEOMonitor
                     }
                 });
 
-                System.Threading.Thread.Sleep(1.8e+6);
+                System.Threading.Thread.Sleep(900000);
             }
         }
 

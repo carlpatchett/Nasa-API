@@ -1,7 +1,7 @@
-﻿using System;
+﻿using NasaAPICore;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,54 +14,49 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.Windows.Threading;
-using NasaAPICore;
 
-namespace NasaAPIFrontend
+namespace NasaAPIFrontend.Views.InternalViews
 {
     /// <summary>
-    /// Interaction logic for NEOViewer.xaml
+    /// Interaction logic for NEOTreeView.xaml
     /// </summary>
-    public partial class NEOViewer : Window
+    public partial class NEOTreeView : UserControl
     {
-
         private ObservableCollection<HierarchicalNode> mRootNodes;
-        private Dispatcher mDispatcher;
+        private NEOViewer mViewer;
 
-        public NEOViewer()
+        public NEOTreeView(NEOViewer viewer)
         {
             InitializeComponent();
 
-            mDispatcher = Dispatcher.CurrentDispatcher;
-
-            this.APIHub = new APIHub();
-
-            this.DataContext = this;
+            mViewer = viewer;
 
             mRootNodes = new ObservableCollection<HierarchicalNode>();
 
-            this.NEOTreeView.ItemsSource = this.RootNodes;
+            this.DataContext = this;
 
             this.EndDatePicker.SelectedDate = DateTime.UtcNow;
 
             this.OrderByCombobox.ItemsSource = this.PropertyValues;
+
+            this.NEOTree.ItemsSource = this.RootNodes;
         }
 
-        public APIHub APIHub { get; set; }
-
-        public bool OrderByDescending { get; set; }
+        public ObservableCollection<HierarchicalNode> ObservableRootNodes { get { return mRootNodes; } }
 
         public IEnumerable<HierarchicalNode> RootNodes { get { return mRootNodes; } }
 
-        public ObservableCollection<string> PropertyValues = new ObservableCollection<string>() { "Absolute Magnitude", 
-                                                                                                  "Estimated Diameter", 
+        public bool OrderByDescending { get; set; }
+
+        public ObservableCollection<string> PropertyValues = new ObservableCollection<string>() { "Absolute Magnitude",
+                                                                                                  "Estimated Diameter",
                                                                                                   "Potentially Hazardous",
                                                                                                   "Miss Distance" };
 
         private async void RetrieveNEOsBtn_Click(object sender, RoutedEventArgs e)
         {
-            var neoRequest = await this.APIHub.APIRequestHub.PerformAPIRequestNEO(this.StartDatePicker.SelectedDate.Value, this.EndDatePicker.SelectedDate.Value);
-            var neos = this.APIHub.APIParserHub.ParseNEOsFromJson(neoRequest);
+            var neoRequest = await mViewer.APIHub.APIRequestHub.PerformAPIRequestNEO(this.StartDatePicker.SelectedDate.Value, this.EndDatePicker.SelectedDate.Value);
+            var neos = mViewer.APIHub.APIParserHub.ParseNEOsFromJson(neoRequest);
 
             // Order the query if we've selected something to OrderBy
             IEnumerable<NearEarthObject> query = null;
@@ -103,7 +98,7 @@ namespace NasaAPIFrontend
                         break;
 
                     case "Miss Distance":
-                        if(this.OrderByDescending)
+                        if (this.OrderByDescending)
                         {
                             query = neos.OrderByDescending(neo => neo.CloseApproachData.MissDistance.Kilometers);
                         }
@@ -354,9 +349,10 @@ namespace NasaAPIFrontend
 
         private void SQLRetrieval_Click(object sender, RoutedEventArgs e)
         {
-            var table = this.APIHub.SQLHub.SQLQueryRetrieveNEOs(this.APIHub.RegistryHub.ConnectionString);
 
-            var neos = this.APIHub.APIParserHub.ParseNEOsFromDataTable(table);
+            var table = mViewer.APIHub.SQLHub.SQLQueryRetrieveNEOs(mViewer.APIHub.RegistryHub.ConnectionString);
+
+            var neos = mViewer.APIHub.APIParserHub.ParseNEOsFromDataTable(table);
 
             // Order the query if we've selected something to OrderBy
             IEnumerable<NearEarthObject> query = null;
